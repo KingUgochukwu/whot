@@ -1,14 +1,16 @@
-import 'package:flutter/cupertino.dart';
-
+import 'package:flutter/material.dart';
+const int _LOCALBTN = 0;
+const int _ONLINEBTN = 1;
+const int _HOWTOPLAYBTN = 2;
 class homePageNotifier extends ChangeNotifier{
   int buttonCode;
   bool selectedAny = false;
   int lastPressed;
  List<bool> buttonStates = List<bool>(6);
   homePageNotifier(){
-    buttonStates[0] = false;
-    buttonStates[1] = false;
-    buttonStates[2] = false;
+    buttonStates[_LOCALBTN] = false;
+    buttonStates[_ONLINEBTN] = false;
+    buttonStates[_HOWTOPLAYBTN] = false;
     buttonStates[3] = false;
     buttonStates[4] = false;
     buttonStates[5] = false;

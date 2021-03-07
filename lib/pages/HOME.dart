@@ -1,4 +1,5 @@
 import 'package:WHOT/constants/CustomTextStyles.dart';
+import 'package:WHOT/constants/globalConstans.dart';
 import 'package:WHOT/constants/pageDimensionsAndColor.dart';
 import 'package:WHOT/stateManagement/HomeStateManagement.dart';
 import 'package:flutter/cupertino.dart';
@@ -15,6 +16,7 @@ class homePage extends StatefulWidget {
 class _homePageState extends State<homePage> {
 pageCalculations pageSpecs;
 homePageNotifier _homePageNotifier_;
+
   @override
   void initState() {
     // TODO: implement initState
@@ -60,13 +62,13 @@ homePageNotifier _homePageNotifier_;
                             Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                _buildButtons("LOCAL", _homePageNotifier_,  height: pageSpecs.HPButtonHeight ?? 200, width: pageSpecs.HPButtonWidth ?? 80, buttonCode: 0),
+                                _buildButtons("LOCAL", notifier: _homePageNotifier_,  height: pageSpecs.HPButtonHeight ?? 200, width: pageSpecs.HPButtonWidth ?? 80, buttonCode: 0),
                                 SizedBox(width: 2,),
-                                _buildButtons("ONLINE", _homePageNotifier_,  height: pageSpecs.HPButtonHeight ?? 200, width: pageSpecs.HPButtonWidth ?? 80, buttonCode: 1)
+                                _buildButtons("ONLINE", notifier: _homePageNotifier_,  height: pageSpecs.HPButtonHeight ?? 200, width: pageSpecs.HPButtonWidth ?? 80, buttonCode: 1)
                               ],
                             ),
                             SizedBox(height: 2,),
-                            _buildButtons("HOW TO PLAY", _homePageNotifier_,  height: pageSpecs.HPButtonHeight ?? 200, width: pageSpecs.HPButtonWidth ?? 80, buttonCode: 2),
+                            _buildButtons("HOW TO PLAY", notifier:  _homePageNotifier_,  height: pageSpecs.HPButtonHeight ?? 200, width: pageSpecs.HPButtonWidth ?? 80, buttonCode: 2),
                             SizedBox(
                               height: 2 * pageSpecs.HPButtonHeight,
                             ),
@@ -114,20 +116,45 @@ homePageNotifier _homePageNotifier_;
                   ),
                   Consumer<homePageNotifier>(
                     builder: (context, homePageSM, child){
-                      return Visibility(child: GestureDetector(
-                        onTap: (){
-                          homePageSM.close();
-                        },
-                        child: Container(
-                          width: pageSpecs.superwidth,
-                          height: pageSpecs.superheight,
-                          decoration: BoxDecoration(
-                              color: Colors.white.withOpacity(0.07),
-                              borderRadius: BorderRadius.circular(8)
+                      return AnimatedOpacity(
+                        opacity: homePageSM.selectedAny ? 1: 0,
+                        duration: Duration(milliseconds: 1500),
+                        child: Visibility(
+                          visible: homePageSM.selectedAny,
+                          child: GestureDetector(
+                          onTap: (){
+                            homePageSM.close();
+                          },
+                          child: Container(
+                            width: pageSpecs.superwidth,
+                            height: pageSpecs.superheight,
+                            decoration: BoxDecoration(
+                                color: Colors.white.withOpacity(0.07),
+                                borderRadius: BorderRadius.circular(8)
+                            ),
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                  children: [
+                                    _selectGameMode(QUICKPLAY, height: pageSpecs.superheight * 0.15, width: pageSpecs.superwidth * 0.5,),
+                                    SizedBox(
+                                      height: pageSpecs.getHeightPad(0.01),
+                                    ),
+                                    _selectGameMode(TOURNAMENT, height: pageSpecs.superheight * 0.15, width: pageSpecs.superwidth * 0.5,),
+                                    SizedBox(
+                                      height: pageSpecs.getHeightPad(0.01),
+                                    ),
+                                    _selectGameMode(DONKEY, height: pageSpecs.superheight * 0.15, width: pageSpecs.superwidth * 0.5,),
+                                    SizedBox(
+                                      height: pageSpecs.getHeightPad(0.01),
+                                    ),
+                                    _selectGameMode(JACKPOT, height: pageSpecs.superheight * 0.15, width: pageSpecs.superwidth * 0.5,),
+                                  ],
+                              ),
+                            ),
                           ),
                         ),
-                      ), visible: homePageSM.selectedAny
-
+                        ),
                       );
                     },
                   )
@@ -139,8 +166,27 @@ homePageNotifier _homePageNotifier_;
       ),
     );
   }
+  void selectGameMode(String title){
 
-  Widget _buildButtons(String title, homePageNotifier notifier,  {Function action, double height, double width, int buttonCode}){
+  }
+
+  Widget _selectGameMode(String title, {double height, double width, }){
+    return GestureDetector(
+      onTap: (){
+        print(title);
+      },
+      child: Container(
+        width: width,
+        height: height,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(10),
+          color: Colors.white.withOpacity(0.20),
+        ),
+        child: Center(child: Text(title, style: CTS().HomeBanner,)),
+      ),
+    ) ;
+  }
+  Widget _buildButtons(String title,  {homePageNotifier notifier, Function action, double height, double width, int buttonCode}){
     return GestureDetector(
       onTap: action ?? (){
         notifier.tappedButton(buttonCode);
