@@ -1,6 +1,8 @@
 import 'package:WHOT/constants/CustomTextStyles.dart';
 import 'package:WHOT/constants/globalConstans.dart';
 import 'package:WHOT/constants/pageDimensionsAndColor.dart';
+import 'package:WHOT/pages/Arena.dart';
+import 'package:WHOT/sharedTools/pageAnimations/scaleUp.dart';
 import 'package:WHOT/stateManagement/HomeStateManagement.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -174,6 +176,7 @@ homePageNotifier _homePageNotifier_;
     return GestureDetector(
       onTap: (){
         print(title);
+        Navigator.of(context).push(pageRouteScaleUp(widget: cardArena(title)));
       },
       child: Container(
         width: width,
